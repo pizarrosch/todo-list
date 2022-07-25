@@ -1,0 +1,33 @@
+.spaceBetween {
+    margin-left: 10px;
+    padding-top: 1.5px;
+    padding-bottom: 0;
+}
+
+.root {
+    list-style: none;
+    margin-inline-start: 600px;
+}
+
+.listPosition {
+    text-align: left;
+    padding: 5px;
+}
+
+.container {
+    display: flex;
+    max-width: fit-content;
+    border: 1px cornflowerblue solid;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.checkedButton {
+    height: 28px;
+    margin-left: 10px;
+    padding: 0 6px;
+}
+
+.isDone {
+    text-decoration: line-through;
+}
