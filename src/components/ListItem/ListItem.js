@@ -5,6 +5,7 @@ import cx from 'classnames';
 export default function ListItem() {
   const [input, setInput] = useState('');
   const [items, setItems] = useState([]);
+  const [hideDoneItem, setHideDoneItems] = useState(false);
 
   function handleChange(e) {
     setInput(e.target.value);
@@ -16,7 +17,8 @@ export default function ListItem() {
     const newTodo = {
       id,
       text: input,
-      done: false
+      done: false,
+      time: new Date(),
     }
 
     setItems([...items, newTodo]);
@@ -31,17 +33,19 @@ export default function ListItem() {
 
   function handleRemove(id) {
     const index = items.findIndex((item) => item.id === id);
-    const part1 = items.slice(0,index);
+    const part1 = items.slice(0, index);
     const part2 = items.slice(index + 1);
     setItems([...part1, ...part2]);
   }
 
   function handleClickDone(todo) {
     const index = items.findIndex((item) => item.id === todo.id);
-    const part1 = items.slice(0,index);
+    const part1 = items.slice(0, index);
     const part2 = items.slice(index + 1);
+
     setItems([...part1, {...todo, done: true}, ...part2]);
-    if(todo.done === true) {
+
+    if (todo.done === true) {
       setItems([...part1, {...todo, done: false}, ...part2]);
     }
   }
@@ -52,39 +56,51 @@ export default function ListItem() {
         value={input}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        maxLength={100}
       />
 
-      <button
-        className={s.addButton}
-        onClick={addTodo}
-      >
+      <button className={s.addButton} onClick={addTodo}>
         Add
       </button>
 
       <ul className={s.root}>
-        {items.map((todo) => (
-          <div className={cx(
-            s.container,
-            todo.done ? s.isDone : null
-          )}>
+        {items
+          .filter(item => {
+            if (hideDoneItem) return !item.done;
+            return true;
+          })
+          .map((todo) => (
             <li
               key={todo.id}
               className={s.listPosition}
             >
-              <span>{todo.text}</span>
+              {todo.time.toLocaleString('de', {timeStyle: 'medium'})}
+              <div className={cx(
+                s.container,
+                todo.done ? s.isDone : null
+              )}              >
+                <span className={s.text}>{todo.text}</span>
+              </div>
               <button
-                className={s.checkedButton}
+                className={s.button}
                 onClick={() => handleClickDone(todo)}
               >
-                &#10004;
+                ✔
               </button>
-              <button className={s.addButton} onClick={() => handleRemove(todo.id)}>
-                &#128465;
+              <button
+                className={s.button}
+                onClick={() => handleRemove(todo.id)}
+              >
+                🗑
               </button>
             </li>
-          </div>
-        ))}
+          ))}
       </ul>
+      {items.length > 0 && (
+        <button onClick={() => setHideDoneItems(!hideDoneItem)}>
+          {hideDoneItem ? 'Show done' : 'Hide done'}
+        </button>
+      )}
     </>
   )
 }
