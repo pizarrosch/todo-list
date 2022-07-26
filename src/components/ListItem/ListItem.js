@@ -1,5 +1,6 @@
 import {useState} from "react";
 import s from './ListItem.module.css';
+import cx from 'classnames';
 
 export default function ListItem() {
   const [input, setInput] = useState('');
@@ -40,6 +41,9 @@ export default function ListItem() {
     const part1 = items.slice(0,index);
     const part2 = items.slice(index + 1);
     setItems([...part1, {...todo, done: true}, ...part2]);
+    if(todo.done === true) {
+      setItems([...part1, {...todo, done: false}, ...part2]);
+    }
   }
 
   return (
@@ -51,7 +55,7 @@ export default function ListItem() {
       />
 
       <button
-        className={s.spaceBetween}
+        className={s.addButton}
         onClick={addTodo}
       >
         Add
@@ -59,19 +63,22 @@ export default function ListItem() {
 
       <ul className={s.root}>
         {items.map((todo) => (
-          <div className={s.container}>
+          <div className={cx(
+            s.container,
+            todo.done ? s.isDone : null
+          )}>
             <li
               key={todo.id}
               className={s.listPosition}
             >
-              <span className={todo.done ? s.isDone : null}>{todo.text}</span>
+              <span>{todo.text}</span>
               <button
                 className={s.checkedButton}
                 onClick={() => handleClickDone(todo)}
               >
                 &#10004;
               </button>
-              <button className={s.spaceBetween} onClick={() => handleRemove(todo.id)}>
+              <button className={s.addButton} onClick={() => handleRemove(todo.id)}>
                 &#128465;
               </button>
             </li>

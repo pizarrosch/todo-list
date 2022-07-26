@@ -1,4 +1,4 @@
-.spaceBetween {
+.addButton {
     margin-left: 10px;
     padding-top: 1.5px;
     padding-bottom: 0;
@@ -6,7 +6,7 @@
 
 .root {
     list-style: none;
-    margin-inline-start: 600px;
+    text-align: center;
 }
 
 .listPosition {
@@ -29,5 +29,5 @@
 }
 
 .isDone {
-    text-decoration: line-through;
+    background-color: green;
 }
